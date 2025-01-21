@@ -1,0 +1,14 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "extends": ["react-app", "plugin:prettier/recommended"],
+    "rules": {}
+  }
+  
