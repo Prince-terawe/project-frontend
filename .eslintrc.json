@@ -1,14 +1,25 @@
+// Delete this file
 {
     "env": {
       "browser": true,
       "es2021": true
     },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
     },
-    "extends": ["react-app", "plugin:prettier/recommended"],
-    "rules": {}
+    "plugins": ["react", "react-hooks", "prettier"],
+    "rules": {
+      "prettier/prettier": "error"
+    }
   }
   
