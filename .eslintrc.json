@@ -19,7 +19,9 @@
     },
     "plugins": ["react", "react-hooks", "prettier"],
     "rules": {
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "camelcase": ["error", { "properties": "always" }],
+      "no-unused-vars": "error"
     }
   }
   
