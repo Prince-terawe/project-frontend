@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api", // Replace with your backend URL
+  baseURL: `${process.env.REACT_APP_HTTP_IP_ADDRESS_URL}/api`,
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
