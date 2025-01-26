@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Typography } from '@mui/material';
-import signUpContent from '../Content/signUp';
+import { Button, Stack, Typography } from '@mui/material';
 import axiosInstance from '../utils/axiosInstance';
 import {
   FormContainer,
@@ -9,13 +8,13 @@ import {
 } from '../Components/styled/styledComponent';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import ResetPasswordContent from '../Content/resetPassword';
 
-const SignUp = () => {
+const ResetPassword = () => {
   let navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    password: '',
+    newPassword: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,11 +30,15 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try {
-      const response = await axiosInstance.post('/auth/signup', formData);
 
+    try {
+      const response = await axiosInstance.put(
+        '/auth/reset-password',
+        formData
+      );
+      // Check if the response contains a token
       if (response.status === 200) {
-        console.log('Form data submitted:', response.data);
+        console.log('Password Reset successful.');
         navigate('/login');
       }
     } catch (error) {
@@ -45,38 +48,28 @@ const SignUp = () => {
   };
   return (
     <>
-      <Typography variant="h3" align="center" mt={2}>
-        {signUpContent.title}
+      <Typography variant="h4" align="center" mt={2}>
+        {ResetPasswordContent.title}
       </Typography>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledTextField
-            id="name"
-            name="name"
-            label={signUpContent.labels.name}
-            variant="filled"
-            placeholder={signUpContent.placeHolders.name}
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <StyledTextField
             id="email"
             name="email"
-            label={signUpContent.labels.email}
+            label={ResetPasswordContent.labels.email}
             variant="filled"
-            placeholder={signUpContent.placeHolders.email}
+            placeholder={ResetPasswordContent.placeHolders.email}
             value={formData.email}
             onChange={handleChange}
             required
             type="email"
           />
           <StyledTextField
-            id="password"
-            name="password"
-            label={signUpContent.labels.password}
+            id="newPassword"
+            name="newPassword"
+            label={ResetPasswordContent.labels.password}
             variant="filled"
-            placeholder={signUpContent.placeHolders.password}
+            placeholder={ResetPasswordContent.placeHolders.password}
             value={formData.password}
             onChange={handleChange}
             required
@@ -88,20 +81,22 @@ const SignUp = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? '' : signUpContent.buttonText}
+            {isSubmitting ? 'Resetting...' : ResetPasswordContent.buttonText}
           </Button>
           {errorMessage && (
             <Typography variant="body2" color="error" mt={2}>
               {errorMessage}
             </Typography>
           )}
-          <Typography variant="body2" color="primary" mt={2}>
-            <Link to="/login">{signUpContent.backToLogin}</Link>
-          </Typography>
+          <Stack>
+            <Typography variant="body2" color="primary" mt={2}>
+              <Link to="/login">{ResetPasswordContent.backToLogin}</Link>
+            </Typography>
+          </Stack>
         </StyledForm>
       </FormContainer>
     </>
   );
 };
 
-export default SignUp;
+export default ResetPassword;

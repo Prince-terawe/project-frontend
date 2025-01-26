@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Typography } from '@mui/material';
-import signUpContent from '../Content/signUp';
+import { Button, Stack, Typography } from '@mui/material';
+import loginContent from '../Content/login';
 import axiosInstance from '../utils/axiosInstance';
 import {
   FormContainer,
@@ -10,10 +10,9 @@ import {
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 
-const SignUp = () => {
+const Login = () => {
   let navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
   });
@@ -31,41 +30,45 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try {
-      const response = await axiosInstance.post('/auth/signup', formData);
 
-      if (response.status === 200) {
-        console.log('Form data submitted:', response.data);
-        navigate('/login');
+    try {
+      const response = await axiosInstance.post('/auth/login', formData);
+      // Check if the response contains a token
+      if (response.data && response.data.token) {
+        // Store the token in localStorage
+        localStorage.setItem('authToken', response.data.token);
+
+        console.log('Login successful, token stored in localStorage.');
+        // alert('Login successful!');
+        navigate('/');
+      } else {
+        console.error('Token not found in response.');
+        setErrorMessage('Login failed. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setErrorMessage('An error occurred. Please try again.');
+
+      // Handle specific error responses
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message || 'Invalid credentials');
+      } else {
+        setErrorMessage('An error occurred. Please try again.');
+      }
     }
   };
   return (
     <>
       <Typography variant="h3" align="center" mt={2}>
-        {signUpContent.title}
+        {loginContent.title}
       </Typography>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledTextField
-            id="name"
-            name="name"
-            label={signUpContent.labels.name}
-            variant="filled"
-            placeholder={signUpContent.placeHolders.name}
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <StyledTextField
             id="email"
             name="email"
-            label={signUpContent.labels.email}
+            label={loginContent.labels.email}
             variant="filled"
-            placeholder={signUpContent.placeHolders.email}
+            placeholder={loginContent.placeHolders.email}
             value={formData.email}
             onChange={handleChange}
             required
@@ -74,9 +77,9 @@ const SignUp = () => {
           <StyledTextField
             id="password"
             name="password"
-            label={signUpContent.labels.password}
+            label={loginContent.labels.password}
             variant="filled"
-            placeholder={signUpContent.placeHolders.password}
+            placeholder={loginContent.placeHolders.password}
             value={formData.password}
             onChange={handleChange}
             required
@@ -88,20 +91,25 @@ const SignUp = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? '' : signUpContent.buttonText}
+            {isSubmitting ? 'Loging...' : loginContent.buttonText}
           </Button>
           {errorMessage && (
             <Typography variant="body2" color="error" mt={2}>
               {errorMessage}
             </Typography>
           )}
-          <Typography variant="body2" color="primary" mt={2}>
-            <Link to="/login">{signUpContent.backToLogin}</Link>
-          </Typography>
+          <Stack>
+            <Typography variant="body2" color="primary" mt={2}>
+              <Link to="/sign-up">{loginContent.backToSignUp}</Link>
+            </Typography>
+            <Typography variant="body2" color="primary" mt={2}>
+              <Link to="/reset-password">{loginContent.reset}</Link>
+            </Typography>
+          </Stack>
         </StyledForm>
       </FormContainer>
     </>
   );
 };
 
-export default SignUp;
+export default Login;

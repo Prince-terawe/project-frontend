@@ -11,6 +11,7 @@ const signUpContent = {
     password: 'Enter your password',
   },
   buttonText: 'Sign Up',
+  backToLogin: 'Already a member? Login here!',
 };
 
 export default signUpContent;
