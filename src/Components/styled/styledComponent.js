@@ -1,6 +1,11 @@
 import { styled } from '@mui/material/styles';
 import { Box, TextField } from '@mui/material';
 
+export const MainContainer = styled(Box)({
+  height: 'auto',
+  // backgroundColor: 'crimson',
+});
+
 export const FormContainer = styled(Box)({
   display: 'flex',
   justifyContent: 'center',

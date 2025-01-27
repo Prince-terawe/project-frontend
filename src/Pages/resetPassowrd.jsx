@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
-import axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '../Utils/axiosInstance';
 import {
   FormContainer,
+  MainContainer,
   StyledForm,
   StyledTextField,
 } from '../Components/styled/styledComponent';
@@ -47,7 +48,7 @@ const ResetPassword = () => {
     }
   };
   return (
-    <>
+    <MainContainer>
       <Typography variant="h4" align="center" mt={2}>
         {ResetPasswordContent.title}
       </Typography>
@@ -95,7 +96,7 @@ const ResetPassword = () => {
           </Stack>
         </StyledForm>
       </FormContainer>
-    </>
+    </MainContainer>
   );
 };
 

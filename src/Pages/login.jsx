@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
 import loginContent from '../Content/login';
-import axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '../Utils/axiosInstance';
 import {
   FormContainer,
+  MainContainer,
   StyledForm,
   StyledTextField,
 } from '../Components/styled/styledComponent';
@@ -11,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 
 const Login = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -40,7 +41,7 @@ const Login = () => {
 
         console.log('Login successful, token stored in localStorage.');
         // alert('Login successful!');
-        navigate('/');
+        navigate('/'); // Ensure you are using the correct path
       } else {
         console.error('Token not found in response.');
         setErrorMessage('Login failed. Please try again.');
@@ -57,7 +58,7 @@ const Login = () => {
     }
   };
   return (
-    <>
+    <MainContainer>
       <Typography variant="h3" align="center" mt={2}>
         {loginContent.title}
       </Typography>
@@ -108,7 +109,7 @@ const Login = () => {
           </Stack>
         </StyledForm>
       </FormContainer>
-    </>
+    </MainContainer>
   );
 };
 
