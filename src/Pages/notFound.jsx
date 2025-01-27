@@ -13,25 +13,17 @@ function NotFound() {
 
   return (
     <NotFoundContainer>
-      <Typography
-        variant="h1"
-        sx={{ fontSize: '6rem', fontWeight: 'bold', color: '#1976d2' }}
-      >
+      <Typography variant="h1" color="#1976d2">
         {NotFoundContent.title}
       </Typography>
       <Typography variant="h4" mt={3} color="#333">
         {NotFoundContent.description1}
       </Typography>
-      <Typography variant="body1" mt={3} color="#666">
+      <Typography variant="body1" my={3} color="#666">
         {NotFoundContent.description2}
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleGoHome}
-        sx={{ padding: '10px' }}
-      >
-        Go to Home
+      <Button variant="contained" color="primary" onClick={handleGoHome}>
+        {NotFoundContent.backToHome}
       </Button>
     </NotFoundContainer>
   );
