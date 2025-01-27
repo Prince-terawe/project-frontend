@@ -10,26 +10,22 @@ import {
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import ResetPasswordContent from '../Content/resetPassword';
+import { useForm } from 'react-hook-form';
 
 const ResetPassword = () => {
   let navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    newPassword: '',
-  });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Initialize react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form submission
+  const onSubmit = async (formData) => {
     setIsSubmitting(true);
 
     try {
@@ -37,7 +33,7 @@ const ResetPassword = () => {
         '/auth/reset-password',
         formData
       );
-      // Check if the response contains a token
+      // Check if the response status is 200
       if (response.status === 200) {
         console.log('Password Reset successful.');
         navigate('/login');
@@ -45,24 +41,33 @@ const ResetPassword = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setErrorMessage('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   return (
     <MainContainer>
       <Typography variant="h4" align="center" mt={2}>
         {ResetPasswordContent.title}
       </Typography>
       <FormContainer>
-        <StyledForm onSubmit={handleSubmit}>
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
           <StyledTextField
             id="email"
             name="email"
             label={ResetPasswordContent.labels.email}
             variant="filled"
             placeholder={ResetPasswordContent.placeHolders.email}
-            value={formData.email}
-            onChange={handleChange}
-            required
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Invalid email address',
+              },
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
             type="email"
           />
           <StyledTextField
@@ -71,9 +76,15 @@ const ResetPassword = () => {
             label={ResetPasswordContent.labels.password}
             variant="filled"
             placeholder={ResetPasswordContent.placeHolders.password}
-            value={formData.password}
-            onChange={handleChange}
-            required
+            {...register('newPassword', {
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters',
+              },
+            })}
+            error={!!errors.newPassword}
+            helperText={errors.newPassword?.message}
             type="password"
           />
           <Button
