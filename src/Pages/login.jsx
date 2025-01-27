@@ -58,7 +58,7 @@ const Login = () => {
 
   return (
     <MainContainer>
-      <Typography variant="h3" align="center" mt={2}>
+      <Typography variant="h4" align="center" mt={2}>
         {loginContent.title}
       </Typography>
       <FormContainer>
