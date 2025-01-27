@@ -10,26 +10,22 @@ import {
 } from '../Components/styled/styledComponent';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Initialize react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form submission
+  const onSubmit = async (formData) => {
     setIsSubmitting(true);
 
     try {
@@ -55,24 +51,33 @@ const Login = () => {
       } else {
         setErrorMessage('An error occurred. Please try again.');
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   return (
     <MainContainer>
       <Typography variant="h3" align="center" mt={2}>
         {loginContent.title}
       </Typography>
       <FormContainer>
-        <StyledForm onSubmit={handleSubmit}>
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
           <StyledTextField
             id="email"
             name="email"
             label={loginContent.labels.email}
             variant="filled"
             placeholder={loginContent.placeHolders.email}
-            value={formData.email}
-            onChange={handleChange}
-            required
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Invalid email address',
+              },
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
             type="email"
           />
           <StyledTextField
@@ -81,9 +86,11 @@ const Login = () => {
             label={loginContent.labels.password}
             variant="filled"
             placeholder={loginContent.placeHolders.password}
-            value={formData.password}
-            onChange={handleChange}
-            required
+            {...register('password', {
+              required: 'Password is required',
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
             type="password"
           />
           <Button
@@ -92,7 +99,7 @@ const Login = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Loging...' : loginContent.buttonText}
+            {isSubmitting ? 'Logging in...' : loginContent.buttonText}
           </Button>
           {errorMessage && (
             <Typography variant="body2" color="error" mt={2}>

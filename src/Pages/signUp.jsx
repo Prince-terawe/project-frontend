@@ -10,28 +10,24 @@ import {
 } from '../Components/styled/styledComponent';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
 
 const SignUp = () => {
   let navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Initialize react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form submission
+  const onSubmit = async (formData) => {
     setIsSubmitting(true);
+
     try {
       const response = await axiosInstance.post('/auth/signup', formData);
 
@@ -42,24 +38,27 @@ const SignUp = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setErrorMessage('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   return (
     <MainContainer>
       <Typography variant="h3" align="center" mt={2}>
         {signUpContent.title}
       </Typography>
       <FormContainer>
-        <StyledForm onSubmit={handleSubmit}>
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
           <StyledTextField
             id="name"
             name="name"
             label={signUpContent.labels.name}
             variant="filled"
             placeholder={signUpContent.placeHolders.name}
-            value={formData.name}
-            onChange={handleChange}
-            required
+            {...register('name', { required: 'Name is required' })}
+            error={!!errors.name}
+            helperText={errors.name?.message}
           />
           <StyledTextField
             id="email"
@@ -67,9 +66,15 @@ const SignUp = () => {
             label={signUpContent.labels.email}
             variant="filled"
             placeholder={signUpContent.placeHolders.email}
-            value={formData.email}
-            onChange={handleChange}
-            required
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Invalid email address',
+              },
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
             type="email"
           />
           <StyledTextField
@@ -78,9 +83,15 @@ const SignUp = () => {
             label={signUpContent.labels.password}
             variant="filled"
             placeholder={signUpContent.placeHolders.password}
-            value={formData.password}
-            onChange={handleChange}
-            required
+            {...register('password', {
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters',
+              },
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
             type="password"
           />
           <Button
@@ -89,7 +100,7 @@ const SignUp = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? '' : signUpContent.buttonText}
+            {isSubmitting ? 'Signing up...' : signUpContent.buttonText}
           </Button>
           {errorMessage && (
             <Typography variant="body2" color="error" mt={2}>
