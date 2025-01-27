@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import signUpContent from '../Content/signUp';
-import axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '../Utils/axiosInstance';
 import {
   FormContainer,
+  MainContainer,
   StyledForm,
   StyledTextField,
 } from '../Components/styled/styledComponent';
@@ -44,7 +45,7 @@ const SignUp = () => {
     }
   };
   return (
-    <>
+    <MainContainer>
       <Typography variant="h3" align="center" mt={2}>
         {signUpContent.title}
       </Typography>
@@ -100,7 +101,7 @@ const SignUp = () => {
           </Typography>
         </StyledForm>
       </FormContainer>
-    </>
+    </MainContainer>
   );
 };
 
