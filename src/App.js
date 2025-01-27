@@ -6,6 +6,7 @@ import Login from './Pages/login';
 import ResetPassword from './Pages/resetPassowrd';
 import Home from './Pages/home';
 import PrivateRoute from './Utils/privateRoutes';
+import NotFound from './Pages/notFound';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>
