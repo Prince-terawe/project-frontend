@@ -27,3 +27,13 @@ export const StyledTextField = styled(TextField)({
     },
   },
 });
+
+export const NotFoundContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  textAlign: 'center',
+  backgroundColor: '#f4f4f4',
+});
