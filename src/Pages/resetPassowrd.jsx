@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import axiosInstance from '../Utils/axiosInstance';
 import {
   FormContainer,
@@ -11,10 +11,10 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import ResetPasswordContent from '../Content/resetPassword';
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ResetPassword = () => {
   let navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize react-hook-form
@@ -35,12 +35,21 @@ const ResetPassword = () => {
       );
       // Check if the response status is 200
       if (response.status === 200) {
-        console.log('Password Reset successful.');
-        navigate('/login');
+        toast.success('Password Reset successful.', {
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        toast.error('Reset Password failed. Please try again.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setErrorMessage('An error occurred. Please try again.');
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || 'Invalid credentials');
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -95,18 +104,12 @@ const ResetPassword = () => {
           >
             {isSubmitting ? 'Resetting...' : ResetPasswordContent.buttonText}
           </Button>
-          {errorMessage && (
-            <Typography variant="body2" color="error" mt={2}>
-              {errorMessage}
-            </Typography>
-          )}
-          <Stack>
-            <Typography variant="body2" color="primary" mt={2}>
-              <Link to="/login">{ResetPasswordContent.backToLogin}</Link>
-            </Typography>
-          </Stack>
+          <Typography variant="body2" color="primary" mt={2}>
+            <Link to="/login">{ResetPasswordContent.backToLogin}</Link>
+          </Typography>
         </StyledForm>
       </FormContainer>
+      <ToastContainer position="top-right" autoClose={3000} />
     </MainContainer>
   );
 };

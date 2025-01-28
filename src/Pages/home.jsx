@@ -13,6 +13,8 @@ import { useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeContent from '../Content/home';
 import { MainContainer } from '../Components/styled/styledComponent';
+import ToastModel from '../Components/toastModel';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -29,7 +31,13 @@ const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
-    navigate('/login');
+    toast.success('Login successful! Redirecting...', {
+      autoClose: 2000, // close after 2 sec
+    });
+
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
   };
 
   const handleViewProfile = () => {
@@ -73,8 +81,10 @@ const Home = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           {HomeContent.desccription}
         </Typography>
+        <ToastModel />
         {/* Add your main content here */}
       </Container>
+      <ToastContainer position="top-right" autoClose={3000} />
     </MainContainer>
   );
 };
