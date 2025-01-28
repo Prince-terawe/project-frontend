@@ -11,10 +11,10 @@ import {
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
 
 const SignUp = () => {
-  let navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize react-hook-form
@@ -32,12 +32,21 @@ const SignUp = () => {
       const response = await axiosInstance.post('/auth/signup', formData);
 
       if (response.status === 200) {
-        console.log('Form data submitted:', response.data);
-        navigate('/login');
+        toast.success('Registration Successful.', {
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        toast.error('Registration failed. Please try again.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setErrorMessage('An error occurred. Please try again.');
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || 'Invalid data!');
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -102,16 +111,12 @@ const SignUp = () => {
           >
             {isSubmitting ? 'Signing up...' : signUpContent.buttonText}
           </Button>
-          {errorMessage && (
-            <Typography variant="body2" color="error" mt={2}>
-              {errorMessage}
-            </Typography>
-          )}
           <Typography variant="body2" color="primary" mt={2}>
             <Link to="/login">{signUpContent.backToLogin}</Link>
           </Typography>
         </StyledForm>
       </FormContainer>
+      <ToastContainer position="top-right" autoClose={3000} />
     </MainContainer>
   );
 };

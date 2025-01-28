@@ -11,10 +11,10 @@ import {
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize react-hook-form
@@ -32,24 +32,23 @@ const Login = () => {
       const response = await axiosInstance.post('/auth/login', formData);
       // Check if the response contains a token
       if (response.data && response.data.token) {
-        // Store the token in localStorage
         localStorage.setItem('authToken', response.data.token);
 
-        console.log('Login successful, token stored in localStorage.');
-        // alert('Login successful!');
-        navigate('/'); // Ensure you are using the correct path
+        toast.success('Login successful! Redirecting...', {
+          autoClose: 2000, // close after 2 sec
+        });
+
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       } else {
-        console.error('Token not found in response.');
-        setErrorMessage('Login failed. Please try again.');
+        toast.error('Login failed. Please try again.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-
-      // Handle specific error responses
       if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.message || 'Invalid credentials');
+        toast.error(error.response.data.message || 'Invalid credentials');
       } else {
-        setErrorMessage('An error occurred. Please try again.');
+        toast.error('An error occurred. Please try again.');
       }
     } finally {
       setIsSubmitting(false);
@@ -101,11 +100,6 @@ const Login = () => {
           >
             {isSubmitting ? 'Logging in...' : loginContent.buttonText}
           </Button>
-          {errorMessage && (
-            <Typography variant="body2" color="error" mt={2}>
-              {errorMessage}
-            </Typography>
-          )}
           <Stack>
             <Typography variant="body2" color="primary" mt={2}>
               <Link to="/sign-up">{loginContent.backToSignUp}</Link>
@@ -116,6 +110,7 @@ const Login = () => {
           </Stack>
         </StyledForm>
       </FormContainer>
+      <ToastContainer position="top-right" autoClose={3000} />
     </MainContainer>
   );
 };
