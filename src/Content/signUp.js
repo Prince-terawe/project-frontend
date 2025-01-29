@@ -1,4 +1,4 @@
-const signUpContent = {
+const SignUpContent = {
   title: 'Sign In',
   labels: {
     name: 'Name',
@@ -14,4 +14,4 @@ const signUpContent = {
   backToLogin: 'Already a member? Login here!',
 };
 
-export default signUpContent;
+export default SignUpContent;

@@ -21,6 +21,11 @@ const theme = createTheme({
       fontWeight: 'bold',
       color: grey[600],
     },
+    h5: {
+      fontSize: '1.5rem',
+      fontWeight: 'semibold',
+      color: grey[600],
+    },
     body1: {
       fontSize: '1rem',
       fontWeight: 'bold',
