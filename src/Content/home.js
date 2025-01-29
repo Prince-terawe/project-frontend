@@ -1,13 +1,6 @@
 const HomeContent = {
   title: 'Dashboard',
-  desccription: 'Welcome to Home!',
-  menu: {
-    title: 'Profile',
-    item: {
-      item1: 'View Profile',
-      item2: 'Logout',
-    },
-  },
+  description: 'Welcome to Project Dashboard!',
 };
 
 export default HomeContent;
