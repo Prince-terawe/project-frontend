@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { Box, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 export const MainContainer = styled(Box)({
   height: 'auto',
+  flexGrow: 1,
   // backgroundColor: 'crimson',
 });
 
@@ -36,4 +37,20 @@ export const NotFoundContainer = styled(Box)({
   height: '100vh',
   textAlign: 'center',
   backgroundColor: '#f4f4f4',
+});
+
+export const NavLogoTypo = styled(Typography)({
+  flexGrow: 1,
+  display: 'flex',
+  justifyItems: 'flex-start',
+  cursor: 'pointer',
+});
+
+export const BoxContainer = styled(Box)({
+  marginTop: '2rem',
+});
+
+export const NavIconButton = styled(Button)({
+  color: 'inherit',
+  minWidth: 0,
 });
