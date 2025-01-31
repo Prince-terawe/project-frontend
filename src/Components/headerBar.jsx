@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppBar, Toolbar, Menu, MenuItem, Box } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
 import NavbarContent from '../Content/headerBar';
-import axiosInstance from '../Utils/axiosInstance';
 import { NavIconButton, NavLogoTypo } from './styled/styledComponent';
-import InfoIcon from '@mui/icons-material/Info';
+import HelpIcon from '@mui/icons-material/Help';
+import MenuIcon from '@mui/icons-material/Menu';
+import PropTypes from 'prop-types';
 
-const Navbar = () => {
+const Navbar = ({ toggleMenu, user }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  //   const [userName, setUserName] = useState('');
-  const [user, setUser] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -36,34 +34,6 @@ const Navbar = () => {
     }, 2000);
   };
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        try {
-          const decodedToken = jwtDecode(token);
-          const userId =
-            decodedToken[
-              'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
-            ]; // Use userId or identifier in the token
-          if (userId) {
-            // Fetch user details from backend
-            const response = await axiosInstance.get(`/auth/profile/${userId}`);
-            if (response.status === 200 && response.data?.name) {
-              console.log('user: ', response.data);
-              setUser(response.data);
-            }
-          }
-        } catch (error) {
-          console.error('Error decoding token or fetching profile:', error);
-          toast.error('Failed to fetch user information');
-        }
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
   const handleProjectClick = () => {
     navigate('/');
   };
@@ -82,6 +52,9 @@ const Navbar = () => {
     <Box>
       <AppBar position="static">
         <Toolbar>
+          <NavIconButton onClick={toggleMenu}>
+            <MenuIcon />
+          </NavIconButton>
           <NavLogoTypo
             variant="h6"
             component="div"
@@ -90,7 +63,7 @@ const Navbar = () => {
             {NavbarContent.name}
           </NavLogoTypo>
           <NavIconButton onClick={handleAboutClick}>
-            <InfoIcon />
+            <HelpIcon />
           </NavIconButton>
           <NavIconButton onClick={handleProfileClick}>
             <AccountCircleIcon />
@@ -115,6 +88,11 @@ const Navbar = () => {
       <ToastContainer position="top-right" autoClose={3000} />
     </Box>
   );
+};
+
+Navbar.propTypes = {
+  toggleMenu: PropTypes.func.isRequired, // Validate that toggleMenu is a function
+  user: PropTypes.object.isRequired, // Validate that user is an object
 };
 
 export default Navbar;
