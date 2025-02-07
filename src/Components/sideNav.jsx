@@ -28,7 +28,7 @@ const SideNav = ({ collapsed, user }) => {
           </StyledListItemIcon>
           {!collapsed && <StyledListItemText primary="Home" />}
         </ListItem>
-        <ListItem button onClick={() => navigate('/users')}>
+        <ListItem button onClick={() => navigate('/all_users')}>
           <StyledListItemIcon>
             <Groups2Icon />
           </StyledListItemIcon>

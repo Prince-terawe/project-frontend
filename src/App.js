@@ -10,6 +10,7 @@ import PublicRoute from './Utils/publicRoutes';
 import NotFound from './Pages/notFound';
 import Profile from './Pages/profile';
 import About from './Pages/about';
+import UserList from './Pages/userList';
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/profile"
             element={<PrivateRoute element={<Profile />} />}
+          />
+          <Route
+            path="/all_users"
+            element={<PrivateRoute element={<UserList />} />}
           />
           <Route path="/about" element={<PrivateRoute element={<About />} />} />
 

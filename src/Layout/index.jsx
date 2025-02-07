@@ -55,7 +55,7 @@ const Layout = ({ children }) => {
       <HeaderBar toggleMenu={toggleMenu} user={user} />
       <ContentContainer>
         {user && <SideNav collapsed={collapsed} user={user} />}
-        <BoxContainer>{children}</BoxContainer>
+        <BoxContainer collapsed={collapsed}>{children}</BoxContainer>
       </ContentContainer>
     </MainContainer>
   );

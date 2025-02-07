@@ -5,7 +5,7 @@ import { Typography, List, ListItem, ListItemText, Box } from '@mui/material';
 import { BoxContainer } from '../Components/styled/styledComponent';
 import { styled } from '@mui/material/styles';
 
-const SectionContainer = styled(BoxContainer)({
+const SectionContainer = styled(Box)({
   display: 'flex',
   alignItems: 'flex-start',
   flexDirection: 'column',
