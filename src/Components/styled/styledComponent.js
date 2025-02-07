@@ -8,6 +8,9 @@ import {
   List,
   ListItemIcon,
   ListItemText,
+  TableContainer,
+  TableRow,
+  TableCell,
 } from '@mui/material';
 
 export const MainContainer = styled(Box)({
@@ -18,9 +21,9 @@ export const MainContainer = styled(Box)({
 
 export const ContentContainer = styled(Box)({
   display: 'flex',
-  // flexGrow: 1,
-  // overflow: 'hidden',
-  flexDirection: 'row',
+  flexgrow: 1,
+  transition: 'margin-left 0.3s ease-in-out',
+  marginLeft: `${(props) => (props.collapsed ? '60px' : '180px')}`,
 });
 
 export const FormContainer = styled(Box)({
@@ -65,10 +68,16 @@ export const NavLogoTypo = styled(Typography)({
 });
 
 export const BoxContainer = styled(Box)({
-  marginTop: '1rem',
-  // width: '100%',
-  // display: 'flex',
+  // marginTop: '1rem',
+  // // width: '100%',
+  // // display: 'flex',
   flexGrow: 1,
+  transition: 'margin-left 0.3s ease-in-out',
+  marginLeft: `${(props) => (props.collapsed ? '60px' : '180px')}`,
+  padding: '1rem',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  height: 'calc(100vh - 96px)',
 });
 
 export const NavIconButton = styled(Button)({
@@ -77,7 +86,7 @@ export const NavIconButton = styled(Button)({
 });
 
 export const StyledDrawer = styled(Drawer)(({ theme, open }) => ({
-  width: open ? '180px' : '10px',
+  width: open ? '180px' : '60px',
   flexShrink: 0,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -86,7 +95,7 @@ export const StyledDrawer = styled(Drawer)(({ theme, open }) => ({
   '& .MuiPaper-root': {
     position: 'relative', // Override the default 'fixed'
     height: 'calc(100vh - 64px)', // Keep full height
-    width: !open ? '60px' : '160px', // Adjust width
+    width: open ? '180px' : '60px', // Syncing width with state
     borderWidth: 0,
     backgroundColor: '#7e57c2',
     borderRadius: '0px',
@@ -126,4 +135,49 @@ export const StyledListItemText = styled(ListItemText)({
   '& .MuiTypography-root': {
     color: 'whitesmoke',
   },
+});
+
+export const TableBox = styled(Box)({
+  marginTop: -20,
+});
+
+export const StyledTableContainer = styled(TableContainer)({
+  marginBottom: '1rem',
+  marginTop: '0.5rem',
+});
+
+export const HeaderRow = styled(TableRow)({
+  backgroundColor: '#7e57c2',
+});
+
+export const BodyRow = styled(TableRow)({
+  // backgroundColor: '#f5f5f5',
+});
+
+export const HeaderCell = styled(TableCell)({
+  color: 'Whitesmoke',
+  fontWeight: 'bold',
+  textAlign: 'justify',
+});
+
+export const BodyCell = styled(TableCell)({
+  fontWeight: 'bold',
+});
+
+export const NotFoundCell = styled(TableCell)({
+  textAlign: 'center',
+});
+
+export const PaginationContainer = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+export const TotalCount = styled(Typography)({
+  marginRight: '1rem',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  marginTop: -2,
+  paddingRight: 2,
 });
