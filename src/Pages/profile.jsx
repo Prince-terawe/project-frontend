@@ -1,13 +1,12 @@
 import React from 'react';
 import { Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
 import Layout from '../Layout/index';
 import { BoxContainer } from '../Components/styled/styledComponent';
 import ProfileContent from '../Content/profile';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
-  const location = useLocation();
-  const user = location.state?.user; // Access user data from navigate state
+  const user = useSelector((state) => state.auth.user);
 
   if (!user) {
     return (

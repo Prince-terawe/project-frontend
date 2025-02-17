@@ -65,7 +65,8 @@ const UserList = () => {
       ) : (
         <TableBox>
           <TotalCount>
-            {UserListContent.total} <strong>{totalUsers}</strong>
+            {UserListContent.total}{' '}
+            <strong style={{ marginLeft: '4px' }}>{totalUsers}</strong>
           </TotalCount>
           <StyledTableContainer component={Paper}>
             <Table>

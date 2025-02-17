@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
 import loginContent from '../Content/login';
 import axiosInstance from '../Utils/axiosInstance';
@@ -12,10 +12,25 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../Redux/slice/authSlice';
+import { jwtDecode } from 'jwt-decode';
+import { useLocation } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const message =
+    location.state?.message || sessionStorage.getItem('authMessage');
+
+  useEffect(() => {
+    if (message) {
+      toast.error(message);
+      sessionStorage.removeItem('authMessage'); // Clear after displaying
+    }
+  }, [message]);
 
   // Initialize react-hook-form
   const {
@@ -32,9 +47,33 @@ const Login = () => {
       const response = await axiosInstance.post('/auth/login', formData);
       // Check if the response contains a token
       if (response.data && response.data.token) {
-        localStorage.setItem('authToken', response.data.token);
+        var token = response.data.token;
+        var user = null;
+        if (token) {
+          try {
+            const decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+            const userId =
+              decodedToken[
+                'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+              ]; // Use userId or identifier in the token
+            if (userId) {
+              // Fetch user details from backend
+              const response = await axiosInstance.get(
+                `/auth/profile/${userId}`
+              );
+              if (response.status === 200 && response.data?.name) {
+                user = response.data;
+              }
+            }
+          } catch (error) {
+            toast.error(error || 'Failed to fetch user information');
+          }
+        }
+        console.log(user);
+        dispatch(loginSuccess({ user, token }));
 
-        toast.success('Login successful! Redirecting...', {
+        toast.success('Login successful!...', {
           autoClose: 2000, // close after 2 sec
         });
 

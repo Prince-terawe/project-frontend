@@ -12,9 +12,11 @@ import {
   StyledListItemText,
   StyledName,
 } from './styled/styledComponent';
+import { useSelector } from 'react-redux';
 
-const SideNav = ({ collapsed, user }) => {
+const SideNav = ({ collapsed }) => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <StyledDrawer variant="permanent" open={!collapsed}>

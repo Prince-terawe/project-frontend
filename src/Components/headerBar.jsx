@@ -8,8 +8,9 @@ import { NavIconButton, NavLogoTypo } from './styled/styledComponent';
 import HelpIcon from '@mui/icons-material/Help';
 import MenuIcon from '@mui/icons-material/Menu';
 import PropTypes from 'prop-types';
+import { persistor } from '../Redux/store';
 
-const Navbar = ({ toggleMenu, user }) => {
+const Navbar = ({ toggleMenu }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -24,7 +25,7 @@ const Navbar = ({ toggleMenu, user }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    persistor.purge(); // Clears old stored state
     toast.success('Logout successful! Redirecting...', {
       autoClose: 2000,
     });
@@ -44,8 +45,7 @@ const Navbar = ({ toggleMenu, user }) => {
 
   const handleViewProfile = () => {
     handleClose();
-    console.log(user);
-    navigate('/profile', { state: { user } }); // Pass user data as state
+    navigate('/profile');
   };
 
   return (
