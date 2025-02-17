@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import SignUp from './Pages/signUp';
 import Login from './Pages/login';
@@ -13,9 +15,15 @@ import About from './Pages/about';
 import UserList from './Pages/userList';
 
 function App() {
+  // useEffect(() => {
+  //   // Test toast on component mount
+  //   toast.error('This is a test error message!');
+  // }, []);
+
   return (
     <Router>
       <div className="App">
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<PublicRoute element={<Login />} />} />
