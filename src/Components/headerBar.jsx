@@ -9,6 +9,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import MenuIcon from '@mui/icons-material/Menu';
 import PropTypes from 'prop-types';
 import { persistor } from '../Redux/store';
+import axiosInstance from '../Utils/axiosInstance';
 
 const Navbar = ({ toggleMenu }) => {
   const navigate = useNavigate();
@@ -24,15 +25,19 @@ const Navbar = ({ toggleMenu }) => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    persistor.purge(); // Clears old stored state
-    toast.success('Logout successful! Redirecting...', {
-      autoClose: 2000,
-    });
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.put('/auth/logout');
+      persistor.purge();
 
-    setTimeout(() => {
-      navigate('/login');
-    }, 2000);
+      toast.success(response.data.message, { autoClose: 2000 });
+
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (error) {
+      toast.error(
+        `Logout failed: ${error.response?.data?.message || error.message}`
+      );
+    }
   };
 
   const handleProjectClick = () => {
