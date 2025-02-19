@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { tokenExpired } from '../Redux/slice/authSlice';
 import { jwtDecode } from 'jwt-decode';
+import axiosInstance from './axiosInstance';
 
 const PrivateRoute = ({ element }) => {
   const dispatch = useDispatch();
@@ -26,10 +27,13 @@ const PrivateRoute = ({ element }) => {
     try {
       const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000; // Convert to seconds
-
       if (decodedToken.exp < currentTime) {
+        const userId =
+          decodedToken[
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+          ]; // Use userId or identifier in the token
+        axiosInstance.put(`/userLog/updateUserLog/${userId}`);
         dispatch(tokenExpired());
-        console.log('my name is lakhan');
         navigate('/login', {
           state: { message: 'Your session has expired. Please log in again.' },
         });
@@ -37,10 +41,8 @@ const PrivateRoute = ({ element }) => {
           'authMessage',
           'Your session has expired. Please log in again.'
         );
-        console.log('navigation done');
       }
     } catch (error) {
-      console.error('Error decoding token:', error);
       dispatch(tokenExpired());
       navigate('/login', {
         state: { message: 'Invalid session. Please log in again.' },

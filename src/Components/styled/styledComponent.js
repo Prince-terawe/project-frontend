@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import {
   Box,
-  Button,
+  // Button,
   TextField,
   Typography,
   Drawer,
@@ -63,7 +63,7 @@ export const NavLogoTypo = styled(Typography)({
   display: 'flex',
   justifyItems: 'flex-start',
   cursor: 'pointer',
-  fontSize: '2rem',
+  fontSize: '1.5rem',
   fontWeight: 'bold',
 });
 
@@ -80,9 +80,14 @@ export const BoxContainer = styled(Box)({
   height: 'calc(100vh - 96px)',
 });
 
-export const NavIconButton = styled(Button)({
+export const NavIconButton = styled(Typography)({
   color: 'inherit',
-  minWidth: 0,
+  display: 'flex',
+  justifyItems: 'flex-start',
+  cursor: 'pointer',
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  marginRight: 8,
 });
 
 export const StyledDrawer = styled(Drawer)(({ theme, open }) => ({
